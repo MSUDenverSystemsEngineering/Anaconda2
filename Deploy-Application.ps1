@@ -132,7 +132,7 @@ Try {
 		}
 		
 		## <Perform Installation tasks here>
-		Execute-Process -Path "$dirFiles\Anaconda2-4.3.1.exe" -Parameters "/InstallationType=AllUsers /S /D=C:\Anaconda2"
+		Execute-Process -Path "Anaconda2-4.3.1-Windows-x86_64.exe" -Parameters "/InstallationType=AllUsers /S /D=C:\Anaconda2"
 		
 		##*===============================================
 		##* POST-INSTALLATION
@@ -170,7 +170,7 @@ Try {
 		}
 		
 		# <Perform Uninstallation tasks here>
-		Execute-Process -Path "C:\Anaconda2\Uninstall-Anaconda.exe" -Parameters "anaconda-clean --yes" -WindowStyle Hidden
+		##Execute-Process -Path "C:\Anaconda2\Uninstall-Anaconda.exe" -Parameters "anaconda-clean --yes" -WindowStyle Hidden
 		
 		##*===============================================
 		##* POST-UNINSTALLATION
