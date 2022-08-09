@@ -129,6 +129,8 @@ Try {
 		## <Perform Pre-Installation tasks here>
 		If (Test-Path -path "$envSystemDrive\Anaconda2\Uninstall-Anaconda2.exe"){
 			Execute-Process -Path "$envSystemDrive\Anaconda2\Uninstall-Anaconda2.exe" -Parameters "/S" -WindowStyle "Hidden" -WaitForMsiExec
+			Write-Log -Message "Waiting for uninstaller..." -Source 'Pre-Installation' -LogType 'CMTrace'
+			Start-Sleep -s 120 # Wait for the uninstaller to actually finish
 		}
 		Else {
 			Write-Log -Message "Anaconda2 installation files not detected in $envSystemDrive\Anaconda2" -Source 'Pre-Installation' -LogType 'CMTrace'
@@ -136,12 +138,13 @@ Try {
 
 		If (Test-Path -path "$envProgramData\Anaconda2\Uninstall-Anaconda2.exe"){
 			Execute-Process -Path "$envProgramData\Anaconda2\Uninstall-Anaconda2.exe" -Parameters "/S" -WindowStyle "Hidden" -WaitForMsiExec
+			Write-Log -Message "Waiting for uninstaller..." -Source 'Pre-Installation' -LogType 'CMTrace'
+			Start-Sleep -s 120 # Wait for the uninstaller to actually finish
 		}
 		Else {
 			Write-Log -Message "Anaconda2 installation files not detected in $envProgramData\Anaconda2" -Source 'Pre-Installation' -LogType 'CMTrace'
 		}
-		Write-Log -Message "Waiting for uninstaller..." -Source 'Pre-Installation' -LogType 'CMTrace'
-		Start-Sleep -s 120 # Wait for the uninstaller to actually finish
+
 
 
 		##*===============================================
@@ -264,8 +267,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU9wYJKoZIhvcNAQcCoIIU6DCCFOQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUOhd6BglQU4fIcgZvSXPsx5RW
-# xtGgghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUlxZwUW+GGWwNFkVrWld972r6
+# gX+gghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTIxMDUyNTAwMDAw
@@ -365,13 +368,13 @@ Catch {
 # ZSBTaWduaW5nIENBIFIzNgIRAKVN33D73PFMVIK48rFyyjEwCQYFKw4DAhoFAKB4
 # MBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQB
 # gjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkE
-# MRYEFDQ8rlXimV+7t18uK2/KTDYlOtRSMA0GCSqGSIb3DQEBAQUABIIBgKGaEeVW
-# uwSVBntMaAxv4bABn3Xqi8lPsge7gQdfn6zHGrGsXf/Olqppxg4b5P5hXL5aqN+N
-# TM3kPXWtsf9BnHrCQTvr5G20E4vBjk3JLD+I8GzWqTK/EuIXZiBrp/1TjV6iFhjD
-# Ct5VoAn7TzGml9A04MJGgR0VQmJanHB/udkPz7nylkGEsT2/sbEtZEWeX8Cg/d3y
-# UVPK+qPy3K2ThwfEP9S81pAcyjfolnSVCm8MyNa16dvUbhR8TLXBarLJw173R591
-# QceWbO4rm1ru0HOR9rkijiDbX1k8BFkIP0DDGJMgwVuiueWGNjCkcv1A023GtUMe
-# DP2xZx4t6Ll0hYYBk1/raf+mwv+GvCZDgxAvzOcfU8EV0TuKGA2oRbBMXVO+Fcl7
-# gZ/9Rkxhbks8IUZysUG83jSnGH9SqaXuVIllG70Uj63tu50kuvt82w9GHGSeBPmQ
-# cxuEPPJjG/Sgy8vb/f1tmbiu0ISiIp4jbvmtI8fZyinNDcdopwnWzhrZng==
+# MRYEFIr2cG0nDipu9edXq1ulbEwA+7CIMA0GCSqGSIb3DQEBAQUABIIBgFxK5GIU
+# 5n6i/cG5VYHKlGG8ZrwvEImOrmO27rVf9fiMMyArnhyrBxKsD9wT3wuAPgWgSifH
+# 9x3c64kpIRHabMVmxDpEd0WKpZ+9BwyPqkIoaPdFI0l0mLMRluvZFJIhaN4/IjrQ
+# 2vBtu9HNuL1gQRYPOWkYijuBxfuGf3hZyiLZJ6tExPJjqTwULpdKjSBD0m8V1jYH
+# pKU0crvrEZLGRsesyJYM0udDhUHaHdPbvDnFCG+1PITApEfVPZyr72uJvlO0vRrM
+# 7sBc+vcQcpFK45YXV7bFHDoVNp7EBcOPggpAu3F1EeJxiFTWucPrWPq68YPf7fmF
+# Rj7155d8J6d3UYMGDoCaTXjUOnaAMacZ1ZDwOIatVxgEwn6za29dPyH/KH4HWJU6
+# 0rO3qzoziQXNTq2UenTPECeG+l2js/b3mhOAgYSYsTwiwXIXpLNRrrXQsiIH6WNF
+# XG/tpTEQqAzu2zYfXBEx5yxNfn9642TIB4YmrTMv8oDaWMr6E3Nlms+vuA==
 # SIG # End signature block
