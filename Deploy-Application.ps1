@@ -129,6 +129,7 @@ Try {
 		## <Perform Pre-Installation tasks here>
 		If (Test-Path -path "$envSystemDrive\Anaconda2\Uninstall-Anaconda2.exe"){
 			Execute-Process -Path "$envSystemDrive\Anaconda2\Uninstall-Anaconda2.exe" -Parameters "/S" -WindowStyle "Hidden" -WaitForMsiExec
+			If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 			Write-Log -Message "Waiting for uninstaller..." -Source 'Pre-Installation' -LogType 'CMTrace'
 			Start-Sleep -s 120 # Wait for the uninstaller to actually finish
 		}
@@ -138,6 +139,7 @@ Try {
 
 		If (Test-Path -path "$envProgramData\Anaconda2\Uninstall-Anaconda2.exe"){
 			Execute-Process -Path "$envProgramData\Anaconda2\Uninstall-Anaconda2.exe" -Parameters "/S" -WindowStyle "Hidden" -WaitForMsiExec
+			If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
 			Write-Log -Message "Waiting for uninstaller..." -Source 'Pre-Installation' -LogType 'CMTrace'
 			Start-Sleep -s 120 # Wait for the uninstaller to actually finish
 		}
@@ -206,6 +208,8 @@ Try {
 		# <Perform Uninstallation tasks here>
 		$exitCode = Execute-Process -Path "$env:ProgramData\Anaconda2\Uninstall-Anaconda2.exe" -Parameters "/S"
 		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) { $mainExitCode = $exitCode.ExitCode }
+		Write-Log -Message "Waiting for uninstaller..." -Source 'Uninstallation' -LogType 'CMTrace'
+		Start-Sleep -s 120 # Wait for the uninstaller to actually finish
 
 
 		##*===============================================
@@ -267,8 +271,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU9wYJKoZIhvcNAQcCoIIU6DCCFOQCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB
 # gjcCAQSgWzBZMDQGCisGAQQBgjcCAR4wJgIDAQAABBAfzDtgWUsITrck0sYpfvNR
-# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQUlxZwUW+GGWwNFkVrWld972r6
-# gX+gghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
+# AgEAAgEAAgEAAgEAAgEAMCEwCQYFKw4DAhoFAAQU8jtU6LngbA5/XxgCWqF351dv
+# BBWgghHXMIIFbzCCBFegAwIBAgIQSPyTtGBVlI02p8mKidaUFjANBgkqhkiG9w0B
 # AQwFADB7MQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVy
 # MRAwDgYDVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEh
 # MB8GA1UEAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTIxMDUyNTAwMDAw
@@ -368,13 +372,13 @@ Catch {
 # ZSBTaWduaW5nIENBIFIzNgIRAKVN33D73PFMVIK48rFyyjEwCQYFKw4DAhoFAKB4
 # MBgGCisGAQQBgjcCAQwxCjAIoAKAAKECgAAwGQYJKoZIhvcNAQkDMQwGCisGAQQB
 # gjcCAQQwHAYKKwYBBAGCNwIBCzEOMAwGCisGAQQBgjcCARUwIwYJKoZIhvcNAQkE
-# MRYEFIr2cG0nDipu9edXq1ulbEwA+7CIMA0GCSqGSIb3DQEBAQUABIIBgFxK5GIU
-# 5n6i/cG5VYHKlGG8ZrwvEImOrmO27rVf9fiMMyArnhyrBxKsD9wT3wuAPgWgSifH
-# 9x3c64kpIRHabMVmxDpEd0WKpZ+9BwyPqkIoaPdFI0l0mLMRluvZFJIhaN4/IjrQ
-# 2vBtu9HNuL1gQRYPOWkYijuBxfuGf3hZyiLZJ6tExPJjqTwULpdKjSBD0m8V1jYH
-# pKU0crvrEZLGRsesyJYM0udDhUHaHdPbvDnFCG+1PITApEfVPZyr72uJvlO0vRrM
-# 7sBc+vcQcpFK45YXV7bFHDoVNp7EBcOPggpAu3F1EeJxiFTWucPrWPq68YPf7fmF
-# Rj7155d8J6d3UYMGDoCaTXjUOnaAMacZ1ZDwOIatVxgEwn6za29dPyH/KH4HWJU6
-# 0rO3qzoziQXNTq2UenTPECeG+l2js/b3mhOAgYSYsTwiwXIXpLNRrrXQsiIH6WNF
-# XG/tpTEQqAzu2zYfXBEx5yxNfn9642TIB4YmrTMv8oDaWMr6E3Nlms+vuA==
+# MRYEFNqU5qdftsJcvcFbq8n2fr/+EtVAMA0GCSqGSIb3DQEBAQUABIIBgBYBIwmD
+# IrkR0Da3+nAev13zbMrSCR/LA4XuhOw8Q993Djbc6GGlB8jChgr1pzSi+d9VYFKW
+# zsl6M06hd6PYwYSO02DEPK7oB7XnK1xch1UBITVJHsmikY1OW4R2FpJ5KC7z2HLH
+# zxkM5iX0GGAekM5gf6LW+XahQUfW79ecr8Hc9JUW2B7kDQ0cAvYNrlIeCU8FNrrX
+# 3FyBpOKPXDLDXvpKI3eWTWoQMG0wClHy8yjwB7VsR3ANiFMgNZ8oHWlXi4nhaxPN
+# M5PYMc3YbQ/jjCGQdObO6s5+9rBMwF5L7j2vUhQ/5N/zqT2rb3D0uJGV4yGs6i2u
+# s4YnyAZOt7KkLbfuX44jFG9OZsLwHv9kplcUVxE7IiarNrXsIned5jP/NpGpJPFK
+# OZrj22969DEAIiTa/ErE5SHEo+k4jAWxUtwti142Jo1E0YV4KJoyIjAYD5LH7fSh
+# EOtASPDo+0sUmfz4ms+S3KKjTQUyj/CuxJVHPyPA5MiNexBinVjHQOZcFA==
 # SIG # End signature block
